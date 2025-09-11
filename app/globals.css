@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
 html, body {
   height: 100%;
@@ -8,7 +9,12 @@ body {
  text-align: right;
  font-family: var(--font-vazir) , sans-serif;
  
-
+ 
+ 
+}
+.vazir{
+  
+  font-family: var(--font-vazir) , sans-serif;
 }
 .lalezar{
   font-family: var(--font-lalezar) , sans-serif;
