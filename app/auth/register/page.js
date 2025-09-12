@@ -1,6 +1,18 @@
+"use client"
 import Image from "next/image";
+import { useActionState, useEffect } from "react";
+import registerAction from "./registeraction";
+import { ToastContainer, toast } from 'react-toastify';
+const initialState = {error:null , message:"" , values:null}
 
 export default function Register() {
+    const [state , formAction] = useActionState(registerAction , initialState)
+
+    useEffect(()=>{
+     state.error?toast.error(state.message):toast.success(state.message)
+    },[state])
+
+
   return (
     <div className="register_container flex  justify-center align-items-center">
 
@@ -9,25 +21,25 @@ export default function Register() {
           <h1>مدیریت مخاطب های شما</h1>
         </div>
 
-        <form action="/api/auth/register" method="POST" className="fieldset bg-base-200  rounded-box w-xs border-2 p-4">
+        <form action={formAction} method="POST" className="fieldset bg-base-200  rounded-box w-xs border-2 p-4">
                
 
             <legend className="fieldset-legend text-3xl">ثبت نام</legend>
 
             <label className="label">نام</label>
-            <input type="text" className="input" name="name" placeholder="نام" />
+            <input type="text" className="input" name="firstName" placeholder="نام" defaultValue={state.values?.firstName||""}/>
 
             <label className="label">نام خانوادگی</label>
-            <input type="text" className="input" name="firstName" placeholder="نام خانوادگی" />
+            <input type="text" className="input" name="lastName" placeholder="نام خانوادگی" defaultValue={state.values?.lastName || ""} />
 
             <label className="label">ایمیل</label>
-            <input type="email" className="input" name="email" placeholder="ایمیل" />
+            <input type="email" className="input" name="email" placeholder="ایمیل" defaultValue={state.values?.email||""} />
 
-            <label className="label">شماره تلفن</label>
-            <input type="number" className="input" name="phoneNumber" placeholder="شماره تلفن" />
+            <label className="label">شماره موبایل</label>
+            <input type="number" className="input" name="phoneNumber" placeholder="شماره موبایل" defaultValue={state.values?.phoneNumber||""}/>
 
             <label className="label">رمز عبور</label>
-            <input type="password" className="input" name="password" placeholder="رمز عبور" />
+            <input type="password" className="input" name="password" placeholder="رمز عبور" defaultValue={state.values?.password||""}/>
 
             <button className="btn btn-neutral mt-4 bg-[#5222d0]">
               ثبت نام{" "}

@@ -1,5 +1,7 @@
 import { Vazirmatn , Lalezar } from "next/font/google";
 import "./globals.css";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const vazir = Vazirmatn({
   variable:"--font-vazir",
@@ -29,6 +31,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${vazir.variable} ${lalezar.variable} antialiased flex items-center justify-center min-h-screen`}
       >
+        <ToastContainer />
         {children}
       </body>
     </html>
