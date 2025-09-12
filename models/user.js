@@ -21,6 +21,10 @@ const Userschema = new Schema({
         type:String ,
         required : true
     },
+    rePassword:{
+        type:String,
+        required:true
+    },
     role:{
         type:String,
         enum:["admin" , "user"],

@@ -8,9 +8,9 @@ import { redirect } from "next/navigation";
 export default async function registerAction(prevState, formData) {
   
   const values = Object.fromEntries(formData.entries());
-  const { firstName, lastName, email, phoneNumber, password ,role } = values;
+  const { firstName, lastName, email, phoneNumber, password , rePassword ,role } = values;
 
-  if( !firstName || !lastName || !email || !phoneNumber || !password){
+  if( !firstName || !lastName || !email || !phoneNumber || !password || !rePassword){
     return {error:true , message:"شما باید همه فیلد ها پرکنید" , values}
   }
   if (lastName.length < 3 || firstName.length < 3) {
@@ -26,6 +26,9 @@ export default async function registerAction(prevState, formData) {
     return {error:true , message:"شماره موبایل نامعتبر هست" , values}
   }
 
+  if(password !== rePassword){
+    return {error:true , message:"رمز عبور باهم تشابه ندارند" , values}
+  }
 
   await Connect();
   const isUser = await user.findOne({email})

@@ -12,9 +12,12 @@ export default function Register() {
     const router = useRouter()
 
     useEffect(()=>{
-     state.error?toast.error(state.message):toast.success(state.message)
-     if(!state.error){
+     if(state.error===false){
+      toast.success(state.message)
       router.push("/auth/login")
+     }
+     else if(state.error === true){
+      toast.error(state.message)
      }
     },[state])
 
@@ -27,7 +30,7 @@ export default function Register() {
           <h1>مدیریت مخاطب های شما</h1>
         </div>
 
-        <form action={formAction} method="POST" className="fieldset bg-base-200  rounded-box w-xs border-2 p-4">
+        <form action={formAction} className="fieldset bg-base-200 border-[#3f3d58]  rounded-box w-xs border-2 p-4">
                
 
             <legend className="fieldset-legend text-3xl">ثبت نام</legend>
@@ -46,6 +49,9 @@ export default function Register() {
 
             <label className="label">رمز عبور</label>
             <input type="password" className="input" name="password" placeholder="رمز عبور" defaultValue={state.values?.password||""}/>
+
+            <label className="label"> تکرار رمز عبور</label>
+            <input type="password" className="input" name="rePassword" placeholder="تکرار رمز عبور" defaultValue={state.values?.rePassword||""}/>
 
             <Submisson/>
         </form>
