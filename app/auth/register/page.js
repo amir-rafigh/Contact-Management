@@ -3,13 +3,19 @@ import Image from "next/image";
 import { useActionState, useEffect } from "react";
 import registerAction from "./registeraction";
 import { ToastContainer, toast } from 'react-toastify';
+import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 const initialState = {error:null , message:"" , values:null}
 
 export default function Register() {
     const [state , formAction] = useActionState(registerAction , initialState)
+    const router = useRouter()
 
     useEffect(()=>{
      state.error?toast.error(state.message):toast.success(state.message)
+     if(!state.error){
+      router.push("/auth/login")
+     }
     },[state])
 
 
@@ -41,9 +47,7 @@ export default function Register() {
             <label className="label">رمز عبور</label>
             <input type="password" className="input" name="password" placeholder="رمز عبور" defaultValue={state.values?.password||""}/>
 
-            <button className="btn btn-neutral mt-4 bg-[#5222d0]">
-              ثبت نام{" "}
-            </button>
+            <Submisson/>
         </form>
       </div>
 
@@ -64,4 +68,13 @@ export default function Register() {
 
     </div>
   );
+}
+
+function Submisson(){
+  const {pending} = useFormStatus()
+  return(
+    <button disabled={pending} className="btn btn-neutral mt-4 bg-[#5222d0]">
+              {pending?"منتظر باشید ....":"ثبت نام"}
+    </button>
+  )
 }

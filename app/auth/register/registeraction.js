@@ -3,6 +3,7 @@
 import user from "@/models/user";
 import Connect from "@/utils/connectDB";
 import bcrypt from "bcrypt"
+import { redirect } from "next/navigation";
 
 export default async function registerAction(prevState, formData) {
   
@@ -34,7 +35,6 @@ export default async function registerAction(prevState, formData) {
   const hash_pass = await bcrypt.hash(password , 10)
   const count_user = await user.countDocuments()
   await user.create({...values , password:hash_pass , role:count_user>0?"user":"admin"})
-
 
   return { error: false, message: "ثبت نام شما با موفقیت انجام شد " , values:{} };
 }
