@@ -1,16 +1,19 @@
 "use client"
 import Image from "next/image";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import registerAction from "./registeraction";
 import { ToastContainer, toast } from 'react-toastify';
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+
 import Link from "next/link";
 const initialState = {error:null , message:"" , values:null}
 
 export default function Register() {
     const [state , formAction] = useActionState(registerAction , initialState)
     const router = useRouter()
+    const [showpass, setShowpass] = useState(true);
 
     useEffect(()=>{
      if(state.error===false){
@@ -49,10 +52,17 @@ export default function Register() {
             <input type="number" className="input  w-full" name="phoneNumber" placeholder="شماره موبایل" defaultValue={state.values?.phoneNumber||""}/>
 
             <label className="label">رمز عبور</label>
-            <input type="password" className="input  w-full" name="password" placeholder="رمز عبور" defaultValue={state.values?.password||""}/>
+            <div className="relative w-full">
+              <input type={showpass?"text":"password"} className="input  w-full" name="password" placeholder="رمز عبور" defaultValue={state.values?.password||""}/>
+              {showpass?<FiEye onClick={()=>setShowpass(!showpass)} size={22}  className="absolute left-2 top-1/3 z-10"/>:<FiEyeOff onClick={()=>setShowpass(!showpass)} size={22}  className="absolute left-2 top-1/3 z-10"/>}
+
+            </div>
 
             <label className="label"> تکرار رمز عبور</label>
-            <input type="password" className="input  w-full" name="rePassword" placeholder="تکرار رمز عبور" defaultValue={state.values?.rePassword||""}/>
+            <div className="relative w-full">
+              <input type={showpass?"text":"password"} className="input  w-full" name="rePassword" placeholder="تکرار رمز عبور" defaultValue={state.values?.rePassword||""}/>
+              {showpass?<FiEye onClick={()=>setShowpass(!showpass)} size={22}  className="absolute left-2 top-1/3 z-10"/>:<FiEyeOff onClick={()=>setShowpass(!showpass)} size={22}  className="absolute left-2 top-1/3 z-10"/>}
+            </div>
 
             <Submisson/>
             <p className="text-center">قبلا ثبت نام انجام داده اید ؟ <Link href="/auth/login"><span className="text-[#5222d0]  text-sm">وارد شوید</span></Link></p>
