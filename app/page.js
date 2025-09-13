@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Home() {
   return (    
     
-    <div className="Container_Contact_home flex flex-col h-full">
+    <div className="Container_Contact_home bg-gradient-to-b from-[#5222d0] to-transparent flex flex-col h-full w-full">
 
     <div className="Contact_home flex flex-col flex-1  justify-center items-center">
         <h1 className=" text-center text-3xl p-0.5 md:text-5xl">مدیریت ساده و امن مخاطبین شما </h1>

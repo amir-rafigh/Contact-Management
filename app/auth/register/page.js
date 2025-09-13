@@ -5,6 +5,7 @@ import registerAction from "./registeraction";
 import { ToastContainer, toast } from 'react-toastify';
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 const initialState = {error:null , message:"" , values:null}
 
 export default function Register() {
@@ -23,7 +24,7 @@ export default function Register() {
 
 
   return (
-    <div className="register_container flex  justify-center align-items-center">
+    <div className="register_container bg-gradient-to-b from-[#5222d0] to-transparent flex  justify-center align-items-center h-full w-full">
 
       <div className="mobile_container flex flex-col h-full justify-center gap-5">
         <div className="title text-center lalezar text-4xl">
@@ -54,6 +55,7 @@ export default function Register() {
             <input type="password" className="input" name="rePassword" placeholder="تکرار رمز عبور" defaultValue={state.values?.rePassword||""}/>
 
             <Submisson/>
+            <p className="text-center">قبلا ثبت نام انجام داده اید ؟ <Link href="/auth/login"><span className="text-[#5222d0]  text-sm">وارد شوید</span></Link></p>
         </form>
       </div>
 
