@@ -4,7 +4,13 @@ export default async function Connect() {
     console.log("already connected");
     return;
   }
-  await mongoose.connect("mongodb://localhost:27017/Contact-management");
-  console.log("DB successfully connected");
-  return;
+  try{
+
+    await mongoose.connect(process.env.connecting_db);
+    console.log("DB successfully connected");
+    return;
+  }catch(err){
+    console.log(err.message);
+    
+  }
 }

@@ -19,7 +19,7 @@ export default function Login() {
     if(state.error){
       toast.error(state.message)
     }
-    if(!state.error){
+    else if(state.error === false){
       toast.success(state.message)
     }
   },[state])
