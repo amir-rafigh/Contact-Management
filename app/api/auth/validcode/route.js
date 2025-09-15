@@ -1,7 +1,6 @@
 import user from "@/models/user";
 import Connect from "@/utils/connectDB";
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {

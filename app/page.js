@@ -1,7 +1,14 @@
+import validtoken from "@/utils/validtoken";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const verify_token = await validtoken();
+  if(verify_token){
+    redirect("/dashboard")
+  }
+
   return (    
     
     <div className="Container_Contact_home bg-gradient-to-b from-[#5222d0] to-transparent flex flex-col h-full w-full">
