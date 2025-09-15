@@ -1,28 +1,87 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useActionState, useEffect, useState } from "react";
-import loginAction from "./loginaction";
+import { useEffect, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { toast } from 'react-toastify';
-
-
-const initialState = { error: null, message: "" };
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function Login() {
+  const route = useRouter();
   const [loginmethod, setLoginmethod] = useState(false);
   const [logincode, setLogincode] = useState(false);
-  const [showpass, setShowpass] = useState(true);
+  const [showpass, setShowpass] = useState(false);
+  const [phonevalue, setPhonevalue] = useState({});
 
-  const [state, formAction] = useActionState(loginAction, initialState);
-  useEffect(()=>{
-    if(state.error){
-      toast.error(state.message)
+  const handlesubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const body = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if (data.error) {
+      toast.error(data.message);
+    } else if (!data.error) {
+      toast.success(data.message);
+      route.replace("/dashboard");
+      setLogincode(true);
     }
-    else if(state.error === false){
-      toast.success(state.message)
+  };
+  
+
+
+  //login phone method
+
+  const phoneLoginmethod = async (e) => {
+    e.preventDefault();
+    const res = await fetch("/api/auth/phoneLogin", {
+      method: "POST",
+      headers: { "Contetn-Type": "application/json" },
+      body: JSON.stringify(phonevalue),
+    });
+    const data = await res.json();
+    if (data.error) {
+      toast.error(data.message);
+    } else if (!data.error) {
+      toast.success(data.message);
+      setLogincode(true);
     }
-  },[state])
+  };
+
+  const pushdata = async (e) => {
+    setPhonevalue((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  //code handler
+  const codehandler = async (e) => {
+    e.preventDefault();
+    const res = await axios.post("/api/auth/validcode", phonevalue, {
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = res.data;
+    if(data.error){
+      return toast.error(data.message)
+    }
+    else if(!data.error){
+      toast.success(data.message)
+      route.replace("/dashboard")
+      return
+    }
+  };
 
   return (
     <div className="login_container flex justify-center bg-gradient-to-b from-[#5222d0] to-transparent items-center gap-5 w-full h-full">
@@ -35,7 +94,9 @@ export default function Login() {
           <button
             onClick={() => setLoginmethod(false)}
             className={
-              loginmethod ? "cursor-pointer" : `bg-[#5222d0] text-white p-2 rounded-lg cursor-pointer`
+              loginmethod
+                ? "cursor-pointer"
+                : `bg-[#5222d0] text-white p-2 rounded-lg cursor-pointer`
             }
           >
             ورود با نام کاربری
@@ -44,14 +105,16 @@ export default function Login() {
           <button
             onClick={() => setLoginmethod(true)}
             className={
-              loginmethod ? `bg-[#5222d0] text-white p-2 rounded-lg cursor-pointer` : "cursor-pointer"
+              loginmethod
+                ? `bg-[#5222d0] text-white p-2 rounded-lg cursor-pointer`
+                : "cursor-pointer"
             }
           >
             ورود با شماره موبایل
           </button>
         </div>
 
-        <form action={formAction} className="fieldset rounded-box p-4">
+        <form onSubmit={handlesubmit} className="fieldset rounded-box p-4">
           {loginmethod ? (
             <>
               {logincode ? (
@@ -60,10 +123,15 @@ export default function Login() {
                   <input
                     type="number"
                     className="input w-full py-6 md:w-lg lg:w-2xl"
-                    name="phoneNumber"
+                    name="code"
                     placeholder="کد 4 رقمی"
+                    onChange={pushdata}
                   />
-                  <button className="p-2 rounded-2xl bg-[#5222d0] text-white text-lg md:w-lg lg:w-2xl">
+                  <button
+                    type="button"
+                    onClick={codehandler}
+                    className="p-2 rounded-2xl bg-[#5222d0] text-white text-lg md:w-lg lg:w-2xl"
+                  >
                     ورود
                   </button>
                 </>
@@ -75,9 +143,11 @@ export default function Login() {
                     className="input w-full py-6 md:w-lg lg:w-2xl"
                     name="phoneNumber"
                     placeholder="شماره موبایل"
+                    onChange={pushdata}
                   />
                   <button
-                    onClick={() => setLogincode(true)}
+                    type="button"
+                    onClick={phoneLoginmethod}
                     className="p-2 rounded-2xl bg-[#5222d0] text-white text-lg md:w-lg lg:w-2xl cursor-pointer"
                   >
                     دریافت کد
@@ -93,24 +163,33 @@ export default function Login() {
                 className="input w-full py-6 md:w-lg lg:w-2xl"
                 name="email"
                 placeholder="ایمیل"
-                defaultValue={state.values?.email||""}
               />
               <label className="label">رمز عبور</label>
-              
+
               <div className="relative w-full">
                 <input
                   type={showpass ? "text" : "password"}
                   className="input w-full py-6 md:w-lg lg:w-2xl"
                   name="password"
                   placeholder="رمز عبور"
-                  defaultValue={state.values?.password||""}
+                />
+                {showpass ? (
+                  <FiEye
+                    onClick={() => setShowpass(!showpass)}
+                    size={22}
+                    className="absolute left-2 top-1/3 z-10 cursor-pointer"
                   />
-                {showpass?<FiEye onClick={()=>setShowpass(!showpass)} size={22}  className="absolute left-2 top-1/3 z-10 cursor-pointer"/>:<FiEyeOff onClick={()=>setShowpass(!showpass)} size={22}  className="absolute left-2 top-1/3 z-10 cursor-pointer" />}
+                ) : (
+                  <FiEyeOff
+                    onClick={() => setShowpass(!showpass)}
+                    size={22}
+                    className="absolute left-2 top-1/3 z-10 cursor-pointer"
+                  />
+                )}
               </div>
-                
-              
+
               <button className="p-2 rounded-2xl bg-[#5222d0] text-white text-lg md:w-lg lg:w-2xl cursor-pointer">
-                ورود{" "}
+                ورود
               </button>
               <Link href="/auth/register">
                 <p className="text-center text-[#5222d0]">

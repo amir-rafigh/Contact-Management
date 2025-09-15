@@ -13,7 +13,7 @@ const initialState = {error:null , message:"" , values:null}
 export default function Register() {
     const [state , formAction] = useActionState(registerAction , initialState)
     const router = useRouter()
-    const [showpass, setShowpass] = useState(true);
+    const [showpass, setShowpass] = useState(false);
 
     useEffect(()=>{
      if(state.error===false){

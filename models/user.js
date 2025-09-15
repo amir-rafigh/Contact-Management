@@ -30,7 +30,16 @@ const Userschema = new Schema({
         enum:["admin" , "user"],
         default:"user"
 
+    },
+    code:{
+        type:String,
+        require:true
+    },
+    time:{
+        type:String,
+        require:true
     }
+
 
 
 })
