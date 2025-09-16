@@ -12,21 +12,19 @@ export default function Login_client() {
   const [loginmethod, setLoginmethod] = useState(false);
   const [logincode, setLogincode] = useState(false);
   const [showpass, setShowpass] = useState(false);
+  const [second, setSecond] = useState(10);
   const [phonevalue, setPhonevalue] = useState({
-    phoneNumber:"",
-    code:""
+    phoneNumber: "",
+    code: "",
   });
 
-  let second = "120"
-  useEffect(()=>{
-    if(second>0){
-      setInterval(() => {
-        second--
-      }, 1000);
-    }
-    
-  },[second])
-  
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSecond(prev =>( prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(id);
+  }, []);
 
   const handlesubmit = async (e) => {
     e.preventDefault();
@@ -52,8 +50,6 @@ export default function Login_client() {
       setLogincode(true);
     }
   };
-  
-
 
   //login phone method
 
@@ -71,6 +67,7 @@ export default function Login_client() {
       toast.success(data.message);
       setLogincode(true);
     }
+    setSecond(120)
   };
 
   const pushdata = async (e) => {
@@ -87,13 +84,12 @@ export default function Login_client() {
       headers: { "Content-Type": "application/json" },
     });
     const data = res.data;
-    if(data.error){
-      return toast.error(data.message)
-    }
-    else if(!data.error){
-      toast.success(data.message)
-      route.replace("/dashboard")
-      return
+    if (data.error) {
+      return toast.error(data.message);
+    } else if (!data.error) {
+      toast.success(data.message);
+      route.replace("/dashboard");
+      return;
     }
   };
 
@@ -133,10 +129,15 @@ export default function Login_client() {
             <>
               {logincode ? (
                 <>
-                <div className="top_info_code flex justify-between">
-                  <label className="label">کد تایید :</label>
-                  <span onClick={()=>setLogincode(false)} className="cursor-pointer text-black hover:text-purple-900">مرحله قبل</span>
-                </div>
+                  <div className="top_info_code flex justify-between">
+                    <label className="label">کد تایید :</label>
+                    <span
+                      onClick={() => setLogincode(false)}
+                      className="cursor-pointer text-black hover:text-purple-900"
+                    >
+                      مرحله قبل
+                    </span>
+                  </div>
                   <input
                     type="number"
                     className="input w-full py-6 md:w-lg lg:w-2xl"
@@ -145,7 +146,9 @@ export default function Login_client() {
                     onChange={pushdata}
                     value={phonevalue.code}
                   />
-                  <p className="text-center text-md">ارسال مجدد کد پس از {second} </p>
+                  <p className="text-center text-md">
+                    ارسال مجدد کد پس از {second>0?second : <span className="cursor-pointer hover:text-purple-900" onClick={phoneLoginmethod}>( ارسال کد ) </span>}
+                  </p>
                   <button
                     type="button"
                     onClick={codehandler}
