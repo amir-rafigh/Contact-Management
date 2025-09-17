@@ -96,7 +96,7 @@ export default function Login_client() {
   return (
     <div className="login_container flex justify-center bg-gradient-to-b from-[#5222d0] to-transparent items-center gap-5 w-full h-full">
       <div className="mobile_container w-full md:w-lg lg:w-2xl">
-        <div className="title text-center lalezar text-4xl">
+        <div className="title text-center lalezar text-4xl posi">
           <h1>ورود به پنل کاربری</h1>
         </div>
 
