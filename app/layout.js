@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fa" dir="rtl" data-theme="light">
       <body
-        className={`${vazir.variable} ${lalezar.variable} antialiased flex items-center justify-center min-h-screen`}
+        className={`${vazir.variable} ${lalezar.variable} antialiased min-h-screen  bg-gradient-to-b from-[#5222d0] to-transparent`}
       >
         <ToastContainer />
         {children}

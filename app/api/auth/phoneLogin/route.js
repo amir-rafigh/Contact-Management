@@ -40,6 +40,7 @@ export async function POST(req){
                 'X-API-KEY': process.env.X_API_KEY
             }},
         )  
+       
         await user.findByIdAndUpdate(isUser._id , {code , time})
        return Response.json({error:false , message:"کد برای شما ارسال شد"})
         

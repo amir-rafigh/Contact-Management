@@ -12,19 +12,20 @@ export default function Login_client() {
   const [loginmethod, setLoginmethod] = useState(false);
   const [logincode, setLogincode] = useState(false);
   const [showpass, setShowpass] = useState(false);
-  const [second, setSecond] = useState(10);
+  const [second, setSecond] = useState(120);
   const [phonevalue, setPhonevalue] = useState({
     phoneNumber: "",
     code: "",
   });
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      setSecond(prev =>( prev > 0 ? prev - 1 : 0));
-    }, 1000);
 
-    return () => clearInterval(id);
-  }, []);
+  useEffect(()=>{
+    const time_id = setInterval(() => {
+      second>0?setSecond(prev=>prev-1):setSecond(0)
+    }, 1000);
+    return () => clearInterval(time_id);
+  },[second])
+
 
   const handlesubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +47,7 @@ export default function Login_client() {
       toast.error(data.message);
     } else if (!data.error) {
       toast.success(data.message);
-      route.replace("/dashboard");
+      route.replace("/dashboard");      
       setLogincode(true);
     }
   };

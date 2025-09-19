@@ -3,7 +3,6 @@
 import user from "@/models/user";
 import Connect from "@/utils/connectDB";
 import bcrypt from "bcrypt"
-import { redirect } from "next/navigation";
 
 export default async function registerAction(prevState, formData) {
   

@@ -88,8 +88,8 @@ export default function Register_client() {
   );
 }
 
-function Submisson(){
-  const {pending} = useFormStatus()
+function Submisson(){  
+  const {pending} = useFormStatus()  
   return(
     <button disabled={pending} className="btn btn-neutral mt-4 bg-[#5222d0]">
               {pending?"منتظر باشید ....":"ثبت نام"}
